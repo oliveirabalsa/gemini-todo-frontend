@@ -8,10 +8,16 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import CreateTaskForm from "./CreateTaskForm";
+import { useState } from "react";
 
-const CreateTaskDialog = () => {
+const CreateTaskDialog = ({ onCreate }: { onCreate: () => void }) => {
+  const [open, setOpen] = useState(false);
+  const onClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button>Add Task</Button>
       </DialogTrigger>
@@ -19,7 +25,7 @@ const CreateTaskDialog = () => {
         <DialogHeader>
           <DialogTitle>Add a new task:</DialogTitle>
           <DialogDescription>
-            <CreateTaskForm />
+            <CreateTaskForm onCreate={onCreate} onClose={onClose} />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

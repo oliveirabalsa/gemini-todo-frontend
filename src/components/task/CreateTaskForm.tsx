@@ -36,7 +36,13 @@ import { useMutation } from "@apollo/client";
 import { createTaskSchema } from "@/services/zod/schemas/createTask.schema";
 import { TaskPriority } from "./types";
 
-const CreateTaskForm = () => {
+const CreateTaskForm = ({
+  onCreate,
+  onClose,
+}: {
+  onCreate: () => void;
+  onClose: () => void;
+}) => {
   const form = useForm<z.infer<typeof createTaskSchema>>({
     resolver: zodResolver(createTaskSchema),
   });
@@ -44,18 +50,17 @@ const CreateTaskForm = () => {
 
   const onSubmit = async (data: z.infer<typeof createTaskSchema>) => {
     try {
-      console.log(data.dueDate.toISOString());
-      const result = await createTaskMutation({
+      await createTaskMutation({
         variables: {
           title: data.title,
-          description: data.description || null,
-          dueDate: new Date(data.dueDate).toISOString() || null,
-          priority: data.priority || null,
-          status: data.status || null,
+          description: data.description || "-",
+          dueDate: data.dueDate || "-",
+          priority: data.priority,
+          status: data.status,
         },
       });
-
-      console.log(result.data.createTask);
+      onCreate();
+      onClose();
     } catch (error) {
       console.error(error);
     }
