@@ -32,39 +32,77 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import CREATE_TASK_MUTATION from "@/services/graphql/mutations/createTask";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { createTaskSchema } from "@/services/zod/schemas/createTask.schema";
-import { TaskPriority } from "./types";
+import { TaskPriority, TaskStatus } from "./types";
+import GET_TASK_BY_ID_QUERY from "@/services/graphql/queries/getOneTask";
+import { useEffect } from "react";
+import UPDATE_TASK_MUTATION from "@/services/graphql/mutations/updateTask";
 
 const CreateTaskForm = ({
   onCreate,
   onClose,
+  taskId,
 }: {
   onCreate: () => void;
   onClose: () => void;
+  taskId: string;
 }) => {
+  const [fetch, { data }] = useLazyQuery(GET_TASK_BY_ID_QUERY, {
+    variables: { id: taskId },
+  });
+
   const form = useForm<z.infer<typeof createTaskSchema>>({
     resolver: zodResolver(createTaskSchema),
   });
   const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
+  const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);
 
   const onSubmit = async (data: z.infer<typeof createTaskSchema>) => {
     try {
-      await createTaskMutation({
-        variables: {
-          title: data.title,
-          description: data.description || "-",
-          dueDate: data.dueDate || "-",
-          priority: data.priority,
-          status: data.status,
-        },
-      });
+      taskId
+        ? await updateTaskMutation({
+            variables: {
+              id: taskId,
+              title: data.title,
+              description: data.description || "-",
+              dueDate: data.dueDate || "-",
+              priority: data.priority,
+              status: data.status,
+            },
+          })
+        : await createTaskMutation({
+            variables: {
+              title: data.title,
+              description: data.description || "-",
+              dueDate: data.dueDate || "-",
+              priority: data.priority,
+              status: data.status,
+            },
+          });
       onCreate();
       onClose();
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (taskId) {
+      fetch();
+      const dataValues = {
+        title: data?.task?.title || "",
+        description: data?.task?.description,
+        dueDate:
+          data?.task?.dueDate && data?.task?.dueDate !== "-"
+            ? new Date(data?.task?.dueDate)
+            : new Date(),
+        priority: data?.task?.priority,
+        status: data?.task?.status,
+      };
+      form.reset(dataValues);
+    }
+  }, [fetch, taskId, data, form]);
 
   return (
     <Form {...form}>
@@ -100,7 +138,7 @@ const CreateTaskForm = ({
           name="dueDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
+              <FormLabel>Due date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -142,7 +180,7 @@ const CreateTaskForm = ({
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue placeholder="Select a priority to display" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -164,20 +202,24 @@ const CreateTaskForm = ({
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue placeholder="Select a status to display" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="TODO">To do</SelectItem>
-                  <SelectItem value="IN_PROGRESS">In progress</SelectItem>
-                  <SelectItem value="COMPLETED">Completed</SelectItem>
+                  <SelectItem value={TaskStatus.TODO}>To do</SelectItem>
+                  <SelectItem value={TaskStatus.IN_PROGRESS}>
+                    In progress
+                  </SelectItem>
+                  <SelectItem value={TaskStatus.COMPLETED}>
+                    Completed
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">{taskId ? "Save" : "Submit"}</Button>
       </form>
     </Form>
   );

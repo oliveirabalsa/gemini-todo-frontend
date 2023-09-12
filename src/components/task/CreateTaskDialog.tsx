@@ -10,14 +10,34 @@ import { Button } from "@/components/ui/button";
 import CreateTaskForm from "./CreateTaskForm";
 import { useState } from "react";
 
-const CreateTaskDialog = ({ onCreate }: { onCreate: () => void }) => {
+const CreateTaskDialog = ({
+  onCreate,
+  open: externalOpen,
+  setOpen: externalSetOpen,
+  taskId,
+  setTaskId,
+}: {
+  onCreate: () => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  setTaskId: (taskId: string) => void;
+  taskId: string;
+}) => {
   const [open, setOpen] = useState(false);
   const onClose = () => {
     setOpen(false);
+    externalSetOpen(false);
+    setTaskId("");
+  };
+
+  const onOpenChange = (open: boolean) => {
+    setOpen(open);
+    externalSetOpen(open);
+    setTaskId(!open ? "" : taskId);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open || externalOpen} onOpenChange={onOpenChange}>
       <DialogTrigger>
         <Button>Add Task</Button>
       </DialogTrigger>
@@ -25,7 +45,11 @@ const CreateTaskDialog = ({ onCreate }: { onCreate: () => void }) => {
         <DialogHeader>
           <DialogTitle>Add a new task:</DialogTitle>
           <DialogDescription>
-            <CreateTaskForm onCreate={onCreate} onClose={onClose} />
+            <CreateTaskForm
+              taskId={taskId}
+              onCreate={onCreate}
+              onClose={onClose}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
