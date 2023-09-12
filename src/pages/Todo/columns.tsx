@@ -1,18 +1,25 @@
 import { TaskPriority, TaskStatus } from "@/components/task/types";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
+import { TaskColumn } from "./types";
 
-export type TaskColumn = {
-  id: string;
-  title: string;
-  description: string;
-  priority: TaskPriority;
-  status: TaskStatus;
-  dueDate: string;
+const priorityBadgeColors: Record<
+  TaskPriority,
+  "secondary" | "default" | "destructive" | "outline"
+> = {
+  [TaskPriority.LOW]: "secondary",
+  [TaskPriority.MEDIUM]: "default",
+  [TaskPriority.HIGH]: "destructive",
 };
 
-export type TaskColumns = {
-  tasks: TaskColumn[];
+const statusBadgeColors: Record<
+  TaskStatus,
+  "secondary" | "default" | "outline" | "destructive"
+> = {
+  [TaskStatus.TODO]: "secondary",
+  [TaskStatus.IN_PROGRESS]: "default",
+  [TaskStatus.COMPLETED]: "outline",
 };
 
 export const columns: ColumnDef<TaskColumn>[] = [
@@ -46,13 +53,30 @@ export const columns: ColumnDef<TaskColumn>[] = [
   {
     accessorKey: "priority",
     header: "Priority",
+    cell: ({ row }) => {
+      const value: TaskPriority = row.getValue("priority");
+      return <Badge variant={priorityBadgeColors[value]}>{value}</Badge>;
+    },
   },
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const value: string = row
+        .getValue<TaskStatus>("status")
+        ?.split("_")
+        ?.join(" ");
+      return (
+        <Badge variant={statusBadgeColors[value as TaskStatus]}>{value}</Badge>
+      );
+    },
   },
   {
     accessorKey: "dueDate",
     header: "Due Date",
+    cell: ({ row }) => {
+      const value: string = row.getValue("dueDate");
+      return value !== "-" ? new Date(value).toLocaleDateString() : value;
+    },
   },
 ];
