@@ -5,7 +5,7 @@ import { ApolloProvider } from "@apollo/client";
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Todo />;
+      <Todo />
     </ApolloProvider>
   );
 }
