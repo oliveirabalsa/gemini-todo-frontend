@@ -1,16 +1,16 @@
-# Gemini Sports Tasks
+# Gemini Sports Todo Frontend 🚀
 
 Gemini Sports Tasks is a Todo List web application built using React, Vite, TypeScript, Tailwind CSS, GraphQL, Shadcn (Tailwind Components Library), and Zod (Data Validator). This project provides the front-end functionalities for managing tasks and connects to a Nest.js backend project.
 
-![image](https://github.com/oliveirabalsa/gemini-todo-frontend/assets/57500163/fac386f5-48ac-4234-a9d1-0c24167478b2)
+![Gemini Sports Tasks Preview](https://github.com/oliveirabalsa/gemini-todo-frontend/assets/57500163/fac386f5-48ac-4234-a9d1-0c24167478b2)
 
-## Prerequisites
+## 🛠️ Prerequisites
 
 Before running the Gemini Sports Tasks application, ensure that you have the following prerequisites installed and configured:
 
 1. **Node.js and npm**: Make sure you have Node.js (v16 or later) and npm (v7 or later) installed on your system. You can download them from [nodejs.org](https://nodejs.org/).
 
-2. **Nest.js Backend**: Ensure that you have the Nest.js backend project running. You can find the backend project at [https://github.com/oliveirabalsa/gemini-todo-backend]
+2. **Nest.js Backend**: Ensure that you have the Nest.js backend project running. You can find the backend project at [Gemini Todo Backend](https://github.com/oliveirabalsa/gemini-todo-backend).
 
 3. **Environment Variables**: Create a `.env` file in the root of this project and set the following environment variable:
 
@@ -20,7 +20,7 @@ Before running the Gemini Sports Tasks application, ensure that you have the fol
 
    Update the URI if the backend GraphQL endpoint is hosted elsewhere or using another port.
 
-## Getting Started
+## 🚀 Getting Started
 
 Follow these steps to set up and run the Gemini Sports Tasks application:
 
@@ -50,16 +50,16 @@ Follow these steps to set up and run the Gemini Sports Tasks application:
 
    This will start the development server and open the application in your default web browser at `http://localhost:8080`.
 
-## Features
+## ✨ Features
 
-- Create, Read, Update, and Delete sports-related tasks.
-- Connects to a Nest.js backend via GraphQL to persist data.
-- Utilizes TypeScript for strong typing and code safety.
-- Integrates Tailwind CSS for responsive and stylish UI.
-- Uses Shadcn for pre-designed Tailwind CSS components.
-- Implements Zod for data validation and error handling.
+- ✅ Create, Read, Update, and Delete sports-related tasks.
+- 🔗 Connects to a Nest.js backend via GraphQL to persist data.
+- ⚙️ Utilizes TypeScript for strong typing and code safety.
+- 🎨 Integrates Tailwind CSS for responsive and stylish UI.
+- 🧩 Uses Shadcn for pre-designed Tailwind CSS components.
+- 🚧 Implements Zod for data validation and error handling.
 
-## Project Structure
+## 📁 Project Structure
 
 The project structure follows the conventions set by Vite and React. Here is a brief overview of important directories and files:
 
@@ -76,8 +76,7 @@ The project structure follows the conventions set by Vite and React. Here is a b
 - `vite.config.js`: Vite configuration file.
 - `tsconfig.json`: TypeScript configuration file.
 
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
