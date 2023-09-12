@@ -1,15 +1,9 @@
 import { gql } from "@apollo/client";
 
-const CREATE_TASK_MUTATION = gql`
-  mutation CreateTask(
-    $title: String!
-    $description: String
-    $dueDate: String
-    $priority: String
-    $status: String
-  ) {
-    createTask(
-      createTaskInput: {
+const UPDATE_TASK_MUTATION = gql`
+  mutation UpdateTask($id: String!, $title: String!) {
+    updateTask(
+      updateTaskInput: {
         title: $title
         description: $description
         dueDate: $dueDate
@@ -20,11 +14,11 @@ const CREATE_TASK_MUTATION = gql`
       id
       title
       description
-      dueDate
       priority
       status
+      dueDate
     }
   }
 `;
 
-export default CREATE_TASK_MUTATION;
+export default UPDATE_TASK_MUTATION;
