@@ -1,25 +1,29 @@
 import CreateTaskDialog from "@/components/task/CreateTaskDialog";
 import { DataTable } from "./DataTable";
-import { Payment, columns } from "./columns";
+import { TaskColumns, columns } from "./columns";
+import { useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import GET_TASKS_QUERY from "@/services/graphql/queries/getTasks";
+import logo from "@/assets/logo.png";
 
 const Todo = () => {
-  const data: Payment[] = [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-  ];
+  const { data, refetch } = useQuery<TaskColumns>(GET_TASKS_QUERY);
+
+  useEffect(() => {
+    refetch();
+  }, [data, refetch]);
 
   return (
     <>
       <header className="container mx-auto py-5 flex justify-between">
-        <h1 className="text-2xl font-bold">Gemini Sports Tasks</h1>
-        <CreateTaskDialog />
+        <section className="flex gap-5 items-center">
+          <img src={logo} alt="Gemini Logo" className="w-20" />
+          <h1 className="text-2xl font-bold">Gemini Sports Tasks</h1>
+        </section>
+        <CreateTaskDialog onCreate={refetch} />
       </header>
       <main className="container mx-auto py-5">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data?.tasks || []} />
       </main>
     </>
   );
