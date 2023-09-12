@@ -1,12 +1,13 @@
-"use client";
+'use client'
 
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -14,43 +15,46 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/table'
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataItem {
+  id: string
 }
 
-export function DataTable<TData, TValue>({
+interface DataTableProps<TData extends DataItem, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+}
+
+export function DataTable<TData extends DataItem, TValue>({
   columns,
   data,
   onRemoveTask,
   onEditTask,
 }: DataTableProps<TData, TValue> & {
-  onRemoveTask: (id: string) => void;
-  onEditTask: (id: string) => void;
+  onRemoveTask: (id: string) => void
+  onEditTask: (id: string) => void
 }) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  });
+  })
 
-  const rows = table.getRowModel().rows;
-  const selectedRows = table.getSelectedRowModel().rows;
+  const rows = table.getRowModel().rows
+  const selectedRows = table.getSelectedRowModel().rows
 
   const onClickDeleteButton = async () => {
     for (const row of selectedRows) {
-      await onRemoveTask(row.original.id);
+      await onRemoveTask(row.original.id)
     }
-    table.reset();
-  };
+    table.reset()
+  }
 
   const onClickEditButton = async () => {
-    if (selectedRows.length > 1) return;
-    await onEditTask(selectedRows[0].original.id);
-  };
+    if (selectedRows.length > 1) return
+    await onEditTask(selectedRows[0].original.id)
+  }
 
   return (
     <main className="flex flex-col gap-4">
@@ -66,10 +70,10 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -79,13 +83,13 @@ export function DataTable<TData, TValue>({
               rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -106,16 +110,22 @@ export function DataTable<TData, TValue>({
       </section>
       <div className="flex gap-2 items-center">
         {selectedRows.length === 1 && (
-          <Button onClick={onClickEditButton} variant="default">
+          <Button
+            onClick={onClickEditButton}
+            variant="default"
+          >
             Edit
           </Button>
         )}
         {selectedRows.length >= 1 && (
-          <Button onClick={onClickDeleteButton} variant="destructive">
+          <Button
+            onClick={onClickDeleteButton}
+            variant="destructive"
+          >
             Delete
           </Button>
         )}
       </div>
     </main>
-  );
+  )
 }
