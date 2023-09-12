@@ -5,9 +5,7 @@ export const createTaskSchema = z.object({
     message: "Title must be at least 2 characters.",
   }),
   description: z.string().optional(),
-  dueDate: z.date({
-    required_error: "A date is required.",
-  }),
+  dueDate: z.date().optional(),
   priority: z.string().optional(),
   status: z.string().optional(),
 });
