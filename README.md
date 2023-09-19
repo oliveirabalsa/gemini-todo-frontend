@@ -1,6 +1,6 @@
 # Gemini Sports Todo Frontend 🚀
 
-Gemini Sports Tasks is a Todo List web application built using React, Vite, TypeScript, Tailwind CSS, GraphQL, Shadcn (Tailwind Components Library), and Zod (Data Validator). This project provides the front-end functionalities for managing tasks and connects to a Nest.js backend project.
+Gemini Sports Tasks Challenge is a Todo List web application built using React, Vite, TypeScript, Tailwind CSS, GraphQL, Shadcn (Tailwind Components Library), and Zod (Data Validator). This project provides the front-end functionalities for managing tasks and connects to a Nest.js backend project.
 
 ![Gemini Sports Tasks Preview](https://github.com/oliveirabalsa/gemini-todo-frontend/assets/57500163/fac386f5-48ac-4234-a9d1-0c24167478b2)
 
